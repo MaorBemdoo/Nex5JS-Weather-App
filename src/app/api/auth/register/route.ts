@@ -14,7 +14,7 @@ export async function POST(req: NextRequest) {
     try{
         await connectDB();
     }catch(err: any){
-        NextResponse.json({ message: 'Error connecting to MongoDB', error: err.message }, {status: 500});
+        return NextResponse.json({ message: 'Error connecting to MongoDB', error: err.message }, {status: 500});
     }
 
     const existingUser = await User.findOne({ username });
@@ -37,8 +37,8 @@ export async function POST(req: NextRequest) {
             password
         });
 
-        NextResponse.json({ message: 'User created and signed in successfully' }, {status: 201});
+        return NextResponse.json({ message: 'User created and signed in successfully' }, {status: 201});
     } catch (err: any) {
-        NextResponse.json({ message: 'User creation or sign-in failed', error: err.message }, {status: 500});
+        return NextResponse.json({ message: 'User creation or sign-in failed', error: err.message }, {status: 500});
     }
 }
