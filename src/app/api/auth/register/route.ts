@@ -1,45 +1,60 @@
-import User from '@/models/User';
-import connectDB from '@/utils/db';
-import bcrypt from 'bcryptjs';
-import { signIn } from '../[...nextauth]/auth';
-import { NextRequest, NextResponse } from 'next/server';
+import User from "@/models/User";
+import connectDB from "@/utils/db";
+import bcrypt from "bcryptjs";
+import { signIn } from "@/utils/auth";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
     const { full_name, username, password } = await req.json();
 
     if (!full_name || !username || !password) {
-        return NextResponse.json({ message: 'Missing required fields' }, {status: 400});
+        return NextResponse.json(
+            { message: "Missing required fields" },
+            { status: 400 }
+        );
     }
 
-    try{
+    try {
         await connectDB();
-    }catch(err: any){
-        return NextResponse.json({ message: 'Error connecting to MongoDB', error: err.message }, {status: 500});
+    } catch (err: any) {
+        return NextResponse.json(
+            { message: "Error connecting to MongoDB", error: err.message },
+            { status: 500 }
+        );
     }
 
     const existingUser = await User.findOne({ username });
     if (existingUser) {
-        return NextResponse.json({ message: 'Username already exist' }, {status: 409});
+        return NextResponse.json(
+            { message: "Username already exist" },
+            { status: 409 }
+        );
     }
 
     const hashedPassword = await bcrypt.hash(password, 7);
     const user = new User({
         full_name,
         username,
-        password: hashedPassword
+        password: hashedPassword,
     });
 
     try {
         await user.save();
 
-        await signIn('credentials', {
+        await signIn("credentials", {
             username,
             password,
-            redirect: false
+            redirect: false,
         });
 
-        return NextResponse.json({ message: 'User created and signed in successfully' }, {status: 201});
+        return NextResponse.json(
+            { message: "User created and signed in successfully" },
+            { status: 201 }
+        );
     } catch (err: any) {
-        return NextResponse.json({ message: 'User creation or sign-in failed', error: err.message }, {status: 500});
+        return NextResponse.json(
+            { message: "User creation or sign-in failed", error: err.message },
+            { status: 500 }
+        );
     }
 }
