@@ -2,7 +2,7 @@ import NextAuth from 'next-auth';
 import bcrypt from 'bcryptjs';
 import Credentials from 'next-auth/providers/credentials';
 import connectDB from '@/utils/db';
-import User from "@/models/User"
+import User from '@/models/User';
 
 export const { handlers, signIn, signOut, auth } =  NextAuth({
     providers: [
@@ -25,8 +25,14 @@ export const { handlers, signIn, signOut, auth } =  NextAuth({
                 }
 
                 if (bcrypt.compareSync(credentials.password as string, user.password)) {
-                    const { password, ...otherFields } = user
-                    return otherFields
+                    return {
+                        id: user._id,
+                        username: user.username,
+                        full_name: user.full_name,
+                        favourites: user.favourites,
+                        createdAt: user.createdAt,
+                        updatedAt: user.updatedAt,
+                    }
                 } else {
                     return null
                 }
