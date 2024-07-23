@@ -23,8 +23,12 @@ async function connectDB() {
     });
   }
 
-  cache.conn = await cache.promise;
-  return cache.conn;
+  try{
+    cache.conn = await cache.promise;
+    return cache.conn;
+  }catch(err){
+    throw new Error('Error connection to MongoDB: ', err)
+  }
 }
 
 export default connectDB;
