@@ -34,7 +34,8 @@ export async function POST(req: NextRequest) {
 
         await signIn('credentials', {
             username,
-            password
+            password,
+            redirect: false
         });
 
         return NextResponse.json({ message: 'User created and signed in successfully' }, {status: 201});
