@@ -13,7 +13,11 @@ export const { handlers, signIn, signOut, auth } =  NextAuth({
             password: { label: "Password", type: "password" }
         },
         async authorize(credentials) {
-            await connectDB();
+            try{
+                await connectDB();
+            }catch(err: any){
+                throw new Error('Error connecting to MongoDB', err)
+            }
             const user = await User.findOne({ username: credentials.username });
 
             if (user && bcrypt.compareSync(credentials.password as string, user.password)) {

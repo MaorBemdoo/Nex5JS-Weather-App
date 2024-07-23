@@ -11,7 +11,11 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ message: 'Missing required fields' }, {status: 400});
     }
 
-    await connectDB();
+    try{
+        await connectDB();
+    }catch(err: any){
+        NextResponse.json({ message: 'Error connecting to MongoDB', error: err.message }, {status: 500});
+    }
 
     const existingUser = await User.findOne({ username });
     if (existingUser) {
