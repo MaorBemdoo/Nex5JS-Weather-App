@@ -1,12 +1,10 @@
-const { default: mongoose } = require("mongoose");
+import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema({
     username: {type: String, unique: true, required: true},
     full_name: {type: String, required: true},
-    password: {type: String, required: true, unique: true},
-    favorites: [{
-        type: String,
-    }]
+    password: {type: String, required: true},
+    favorites: {type: Array, default: []}
 }, {timestamps: true})
 
 const User = mongoose.model("User", userSchema);
