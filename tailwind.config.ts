@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss";
+import plugin from "tailwindcss/plugin";
 
 const config: Config = {
   content: [
@@ -7,6 +8,22 @@ const config: Config = {
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {},
-  plugins: [],
+  plugins: [
+    plugin(require('@tailwindcss/forms')),
+    plugin(function({ matchVariant }){
+      matchVariant(
+        'not',
+        (value) => {
+          return `&:not(${value})`
+        }
+      )
+      matchVariant(
+        'is',
+        (value) => {
+          return `&:is(${value})`
+        }
+      )
+    })
+  ],
 };
 export default config;

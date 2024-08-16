@@ -13,7 +13,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body className="h-screen has-[#auth]:grid has-[#auth]:place-content-center">{children}</body>
     </html>
   );
 }
