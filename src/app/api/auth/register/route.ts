@@ -52,9 +52,6 @@ export async function POST(req: NextRequest) {
             { status: 201 }
         );
     } catch (err: any) {
-        return NextResponse.json(
-            { message: "User creation or sign-in failed", error: err.message },
-            { status: 500 }
-        );
+        return NextResponse.json({message: err.cause.err.message}, {status: err.cause.err.status})
     }
 }

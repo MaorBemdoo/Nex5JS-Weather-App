@@ -15,8 +15,9 @@ export async function POST(req: NextRequest){
             redirect: false
         })
 
-        return NextResponse.json("Successfully logged in", {status: 200});
+        return NextResponse.json({message: "Successfully logged in"}, {status: 200});
     }catch(err: any){
-        return NextResponse.json({message: "Login failed", error: err.message})
+        console.log(err)
+        return NextResponse.json({message: err.cause.err.message}, {status: err.cause.err.status})
     }
 }

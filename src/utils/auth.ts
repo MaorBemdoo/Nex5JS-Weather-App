@@ -1,4 +1,4 @@
-import NextAuth from 'next-auth';
+import NextAuth, { CredentialsSignin } from 'next-auth';
 import bcrypt from 'bcryptjs';
 import Credentials from 'next-auth/providers/credentials';
 import connectDB from '@/utils/db';
@@ -18,10 +18,21 @@ export const { handlers, signIn, signOut, auth } =  NextAuth({
                 }catch(err: any){
                     throw new Error('Error connecting to MongoDB', err)
                 }
+
+                class UserNotFoundError extends CredentialsSignin {
+                    message = "User doesn't exist"
+                    status = 404
+                }
+
+                class PasswordIncorrectError extends CredentialsSignin {
+                    message = "Invalid Passord"
+                    status = 400
+                }
+
                 const user = await User.findOne({ username: credentials.username });
 
                 if(!user){
-                    return null
+                    throw new UserNotFoundError()
                 }
 
                 if (bcrypt.compareSync(credentials.password as string, user.password)) {
@@ -34,7 +45,7 @@ export const { handlers, signIn, signOut, auth } =  NextAuth({
                         updatedAt: user.updatedAt,
                     }
                 } else {
-                    return null
+                    throw new PasswordIncorrectError()
                 }
             }
         })
