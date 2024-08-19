@@ -63,7 +63,7 @@ export default function Register() {
                 <span className="absolute right-6 top-1/2 -translate-y-1/2 text-xl cursor-pointer opacity-50 hover:opacity-100" onClick={() => setIsPasswordVisible(!isPasswordVisible)}>{isPasswordVisible ? <FaEyeSlash/> : <FaEye/>}</span>
             </div>
             <input type="password" placeholder="Confirm Password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)}/>
-            <button type="submit" className="rounded bg-blue-900 text-white p-2 mb-2" ref={submitRef}>Submit</button>
+            <button type="submit" className="rounded bg-blue-900 text-white p-2 mb-2 disabled:bg-blue-900/50" ref={submitRef}>Submit</button>
         </form>
     );
 }

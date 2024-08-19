@@ -54,7 +54,7 @@ export default function Login() {
                 <input type={isPasswordVisible ? "text" : "password"} autoComplete="off" value={password} onChange={(e) => setPassword(e.target.value)} name="password" placeholder="Password" className="block p-4 h-12 w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"/>
                 <span className="absolute right-6 top-1/2 -translate-y-1/2 text-xl cursor-pointer opacity-50 hover:opacity-100" onClick={() => setIsPasswordVisible(!isPasswordVisible)}>{isPasswordVisible ? <FaEyeSlash/> : <FaEye/>}</span>
             </div>
-            <button type="submit" className="rounded bg-blue-900 text-white p-2 mb-2 disabled:cursor-not-allowed disabled:bg-blue-900/50" ref={submitRef}>Submit</button>
+            <button type="submit" className="rounded bg-blue-900 text-white p-2 mb-2 disabled:bg-blue-900/50" ref={submitRef}>Submit</button>
         </form>
     )
 }
