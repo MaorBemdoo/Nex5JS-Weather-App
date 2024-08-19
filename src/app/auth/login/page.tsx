@@ -11,10 +11,14 @@ export default function Login() {
     const [password, setPassword] = useState("")
     const [isPasswordVisible, setIsPasswordVisible] = useState(false)
 
+    const submitRef = useRef<HTMLButtonElement>(null)
     const redirect = useRouter()
 
     const login = async(e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
+        if(submitRef.current !== null){
+            submitRef.current.disabled = true
+        }
 
         try{
             const res = await fetch("/api/auth/login", {
@@ -36,6 +40,10 @@ export default function Login() {
         }catch(err){
             // console.log(err)
             toast.error("Error logging in")
+        }finally{
+            if(submitRef.current !== null){
+                submitRef.current.disabled = false
+            }
         }
     }
 
@@ -46,7 +54,7 @@ export default function Login() {
                 <input type={isPasswordVisible ? "text" : "password"} autoComplete="off" value={password} onChange={(e) => setPassword(e.target.value)} name="password" placeholder="Password" className="block p-4 h-12 w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"/>
                 <span className="absolute right-6 top-1/2 -translate-y-1/2 text-xl cursor-pointer opacity-50 hover:opacity-100" onClick={() => setIsPasswordVisible(!isPasswordVisible)}>{isPasswordVisible ? <FaEyeSlash/> : <FaEye/>}</span>
             </div>
-            <button type="submit" className="rounded bg-blue-900 text-white p-2 mb-2">Submit</button>
+            <button type="submit" className="rounded bg-blue-900 text-white p-2 mb-2 disabled:cursor-not-allowed disabled:bg-blue-900/50" ref={submitRef}>Submit</button>
         </form>
     )
 }

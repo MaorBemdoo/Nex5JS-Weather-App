@@ -1,7 +1,7 @@
 "use client"
 
 import { useRouter } from "next/navigation"
-import { FormEvent, useState } from "react"
+import { FormEvent, useRef, useState } from "react"
 import { FaEyeSlash, FaEye } from "react-icons/fa6"
 import { toast } from "react-toastify"
 
@@ -13,10 +13,14 @@ export default function Register() {
     const [confirmPassword, setConfirmPassword] = useState("")
     const [isPasswordVisible, setIsPasswordVisible] = useState(false)
 
+    const submitRef = useRef<HTMLButtonElement>(null)
     const redirect = useRouter()
 
     const register = async(e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
+        if(submitRef.current !== null){
+            submitRef.current.disabled = true
+        }
 
         if(password !== confirmPassword){
             toast.error("Passwords are not equal")
@@ -43,6 +47,10 @@ export default function Register() {
         }catch(err){
             console.log(err)
             toast.error("Error Registering user")
+        }finally{
+            if(submitRef.current !== null){
+                submitRef.current.disabled = false
+            }
         }
     }
 
@@ -55,7 +63,7 @@ export default function Register() {
                 <span className="absolute right-6 top-1/2 -translate-y-1/2 text-xl cursor-pointer opacity-50 hover:opacity-100" onClick={() => setIsPasswordVisible(!isPasswordVisible)}>{isPasswordVisible ? <FaEyeSlash/> : <FaEye/>}</span>
             </div>
             <input type="password" placeholder="Confirm Password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)}/>
-            <button type="submit" className="rounded bg-blue-900 text-white p-2 mb-2">Submit</button>
+            <button type="submit" className="rounded bg-blue-900 text-white p-2 mb-2" ref={submitRef}>Submit</button>
         </form>
     );
 }
